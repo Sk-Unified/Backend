@@ -7,3 +7,70 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Stratergy {
+  Email
+  Phone
+  Google
+  Facebook
+  Twitter
+}
+
+model Users {
+  id        Int      @id @unique @default(autoincrement())
+  name      String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  credentials AuthCredentials?
+
+  InstagramAccounts InstagramAccounts[]
+  FacebookAccounts  FacebookAccounts[]
+  TwitterAccounts   TwitterAccounts[]
+}
+
+model AuthCredentials {
+  id         Int       @id @unique @default(autoincrement())
+  user       Users     @relation(fields: [userId], references: [id])
+  userId     Int       @unique
+  stratergy  Stratergy
+  email      String    @unique
+  password   String
+  phone      String?   @unique
+  isVerified Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model InstagramAccounts {
+  id          Int      @id @unique @default(autoincrement())
+  user        Users    @relation(fields: [usersId], references: [id])
+  usersId     Int      @unique
+  instagramId String   @unique
+  accessToken String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FacebookAccounts {
+  id              Int      @id @unique @default(autoincrement())
+  user            Users    @relation(fields: [usersId], references: [id])
+  usersId         Int      @unique
+  facebookId      String   @unique
+  facebookPageId  String   @unique
+  userAccessToken String   @unique
+  pageAccessToken String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model TwitterAccounts {
+  id           Int      @id @unique @default(autoincrement())
+  user         Users    @relation(fields: [usersId], references: [id])
+  usersId      Int      @unique
+  twitterId    String   @unique
+  access_token String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
