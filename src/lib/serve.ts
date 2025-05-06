@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { auth } from "./lib/auth";
+import { auth } from "./auth";
+import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 
 const app = new Hono<{
@@ -8,10 +9,6 @@ const app = new Hono<{
     session: typeof auth.$Infer.Session.session | null;
   };
 }>();
-
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
 
 app.on(["POST", "GET"], "/api/auth/*", (c) => {
   return auth.handler(c.req.raw);
@@ -43,4 +40,4 @@ app.use("*", async (c, next) => {
   return next();
 });
 
-export default app;
+serve(app);

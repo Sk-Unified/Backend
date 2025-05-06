@@ -20,7 +20,7 @@ model User {
   name          String
   email         String
   emailVerified Boolean  @default(false)
-  phone         String
+  phone         String?
   phoneVerified Boolean  @default(false)
   image         String?
   createdAt     DateTime
@@ -85,7 +85,7 @@ model Verification {
 model InstagramAccounts {
   id          Int      @id @unique @default(autoincrement())
   user        User     @relation(fields: [usersId], references: [id])
-  usersId     String   
+  usersId     String
   instagramId String   @unique
   accessToken String   @unique
   createdAt   DateTime @default(now())
@@ -95,7 +95,7 @@ model InstagramAccounts {
 model FacebookAccounts {
   id              Int      @id @unique @default(autoincrement())
   user            User     @relation(fields: [usersId], references: [id])
-  usersId         String   
+  usersId         String
   facebookId      String   @unique
   facebookPageId  String   @unique
   userAccessToken String   @unique
@@ -107,7 +107,7 @@ model FacebookAccounts {
 model TwitterAccounts {
   id           Int      @id @unique @default(autoincrement())
   user         User     @relation(fields: [usersId], references: [id])
-  usersId      String   
+  usersId      String
   twitterId    String   @unique
   access_token String   @unique
   createdAt    DateTime @default(now())
